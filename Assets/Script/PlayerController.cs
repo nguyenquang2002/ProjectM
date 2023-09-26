@@ -64,5 +64,6 @@ public class PlayerController : MonoBehaviour
             
         }
         animator.SetBool("Jumping", !Grounded());
+        animator.SetFloat("yVelocity", rb.velocity.y);
     }
 }
