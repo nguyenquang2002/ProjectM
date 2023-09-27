@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Horizontal Movement Settings")]
     [SerializeField] float speed = 4;
+    [Space(5)]
 
     [Header("Vertical Movement Settings")]
     [SerializeField] float jumpForce = 7;
@@ -15,16 +16,32 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float coyteTime;
     private int airJumpCounter = 0;
     [SerializeField] int maxAirJump;
+    [SerializeField] GameObject jumpEffect;
+    [Space(5)]
 
     [Header("Ground Check Settings")]
     [SerializeField] Transform groundCheckPoint;
     [SerializeField] float groundCheckRadius = 0.2f;
     [SerializeField] LayerMask whatIsGround;
+    [Space(5)]
+
+    [Header("Attack Settings")]
+    private bool attack = false;
+    float timeBetweenAttack = 0.5f, timeSinceAttack;
+    [SerializeField] float damage;
+    [SerializeField] Transform attack1Transform, attack2Transform;
+    [SerializeField] Vector2 attack1Position, attack2Position;
+    [SerializeField] LayerMask attackableLayer;
+    [Space(5)]
 
     [Header("Dash Settings")]
     [SerializeField] float dashSpeed;
     [SerializeField] float dashTime;
     [SerializeField] float dashCooldown;
+    [SerializeField] GameObject dashEffect;
+    [Space(5)]
+
+    
 
     private PlayerStateList pState;
     private float velX, velY;
@@ -71,11 +88,19 @@ public class PlayerController : MonoBehaviour
         Run();
         Jump();
         StartDash();
+        Attack();
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(attack1Transform.position, attack1Position);
+        Gizmos.DrawWireCube(attack2Transform.position, attack2Position);
     }
     private void GetInputs()
     {
         velX = Input.GetAxisRaw("Horizontal");
         velY = rb.velocity.y;
+        attack = Input.GetButtonDown("Attack");
     }
     private void Run() { 
         rb.velocity = new Vector2(velX * speed, velY);
@@ -89,6 +114,34 @@ public class PlayerController : MonoBehaviour
         } 
         else if(rb.velocity.x > 0) {
             transform.localScale = new Vector3(1, transform.localScale.y);
+        }
+    }
+    private void Attack()
+    {
+        timeSinceAttack += Time.deltaTime;
+        if(attack && timeSinceAttack > timeBetweenAttack)
+        {
+            animator.SetTrigger("Attacking");
+            animator.SetBool("Running", false);
+            animator.SetBool("Jumping", false);
+            timeSinceAttack = 0;
+
+            Hit(attack1Transform, attack1Position);
+        }
+    }
+    private void Hit(Transform _attackTransform, Vector2 _attackArea)
+    {
+        Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
+        if(objectsToHit.Length > 0)
+        {
+            Debug.Log("Hit");
+        }
+        for(int i=0; i<objectsToHit.Length; i++)
+        {
+            if (objectsToHit[i].GetComponent<Enemy>() != null)
+            {
+                objectsToHit[i].GetComponent<Enemy>().EnemyHit(damage);
+            }
         }
     }
     private void StartDash()
@@ -113,6 +166,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Jumping", false);
         rb.gravityScale = 0;
         rb.velocity = new Vector2(transform.localScale.x * dashSpeed, 0);
+        Instantiate(dashEffect, transform);
         yield return new WaitForSeconds(dashTime);
         rb.gravityScale = gravity;
         pState.dashing = false;
@@ -137,12 +191,14 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 pState.jumping = true;
+                Instantiate(jumpEffect, transform);
             }
             else if(!Grounded() && Input.GetButtonDown("Jump") && airJumpCounter < maxAirJump)
             {
                 pState.jumping = true;
                 airJumpCounter++;
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                Instantiate(jumpEffect, transform);
             }
         }
         animator.SetBool("Jumping", !Grounded());
