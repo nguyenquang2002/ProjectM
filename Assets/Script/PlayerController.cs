@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,13 +27,18 @@ public class PlayerController : MonoBehaviour
     [Space(5)]
 
     [Header("Attack Settings")]
-    private bool attack = false;
-    float timeBetweenAttack = 0.5f, timeSinceAttack;
     [SerializeField] float damage;
+    private bool attack = false;
+    float timeBetweenAttack = 0.4f, timeSinceAttack;
     [SerializeField] Transform attack1Transform, attack2Transform;
     [SerializeField] Vector2 attack1Position, attack2Position;
     [SerializeField] LayerMask attackableLayer;
     [Space(5)]
+
+    [Header("Health Settings")]
+    public float health;
+    public float maxHealth;
+    [SerializeField] float knockbackForceX, knockbackForceY;
 
     [Header("Dash Settings")]
     [SerializeField] float dashSpeed;
@@ -41,9 +47,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject dashEffect;
     [Space(5)]
 
-    
-
-    private PlayerStateList pState;
+    public PlayerStateList pState;
     private float velX, velY;
     private float gravity;
     private Rigidbody2D rb;
@@ -63,6 +67,7 @@ public class PlayerController : MonoBehaviour
         {
             Instance = this;
         }
+        health = maxHealth;
     }
 
     // Start is called before the first frame update
@@ -76,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
         gravity = rb.gravityScale;
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -102,8 +107,39 @@ public class PlayerController : MonoBehaviour
         velY = rb.velocity.y;
         attack = Input.GetButtonDown("Attack");
     }
+    private void CancelBooleanAnimation()
+    {
+        animator.SetBool("Running", false);
+        animator.SetBool("Jumping", false);
+    }
+    private void ClampHealth()
+    {
+        health = Mathf.Clamp(health, 0, maxHealth);
+    }
+    public void TakeDamage(float _damage)
+    {
+        health -= Mathf.RoundToInt(_damage);
+        StartCoroutine(TakingDamage());
+    }
+    IEnumerator TakingDamage()
+    {
+        pState.isDamaged = true;
+        ClampHealth();
+        animator.SetTrigger("TakingDamage");
+        if (pState.enemyRight)
+        {
+            rb.velocity = new Vector2(-knockbackForceX, knockbackForceY);
+        }
+        else
+        {
+            rb.velocity = new Vector2(knockbackForceX, knockbackForceY);
+        }
+        CancelBooleanAnimation();
+        yield return new WaitForSeconds(1f);
+        pState.isDamaged = false;
+    }
     private void Run() { 
-        rb.velocity = new Vector2(velX * speed, velY);
+        rb.velocity = new Vector2(velX * speed, rb.velocity.y);
         animator.SetBool("Running", rb.velocity.x != 0 && Grounded());
     }
     private void Flip()
@@ -122,8 +158,7 @@ public class PlayerController : MonoBehaviour
         if(attack && timeSinceAttack > timeBetweenAttack)
         {
             animator.SetTrigger("Attacking");
-            animator.SetBool("Running", false);
-            animator.SetBool("Jumping", false);
+            CancelBooleanAnimation();
             timeSinceAttack = 0;
 
             Hit(attack1Transform, attack1Position);
@@ -162,8 +197,7 @@ public class PlayerController : MonoBehaviour
         canDash = false;
         pState.dashing = true;
         animator.SetTrigger("Dashing");
-        animator.SetBool("Running", false);
-        animator.SetBool("Jumping", false);
+        CancelBooleanAnimation();
         rb.gravityScale = 0;
         rb.velocity = new Vector2(transform.localScale.x * dashSpeed, 0);
         Instantiate(dashEffect, transform);
