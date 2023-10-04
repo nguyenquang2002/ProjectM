@@ -87,7 +87,8 @@ public class PlayerController : MonoBehaviour
     {
         GetInputs();
         UpdateJumpVariable();
-
+        if (pState.isDamaged) return;
+        if (pState.attacking) return;
         if (pState.dashing) return;
         Flip();
         Run();
@@ -128,14 +129,15 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("TakingDamage");
         if (pState.enemyRight)
         {
-            rb.velocity = new Vector2(-knockbackForceX, knockbackForceY);
+            rb.AddForce( new Vector2(-knockbackForceX, knockbackForceY), ForceMode2D.Force);
         }
         else
         {
-            rb.velocity = new Vector2(knockbackForceX, knockbackForceY);
+            rb.AddForce(new Vector2(knockbackForceX, knockbackForceY), ForceMode2D.Force);
         }
         CancelBooleanAnimation();
         yield return new WaitForSeconds(1f);
+        rb.velocity = new Vector2(0, 0);
         pState.isDamaged = false;
     }
     private void Run() { 
@@ -160,17 +162,26 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Attacking");
             CancelBooleanAnimation();
             timeSinceAttack = 0;
-
             Hit(attack1Transform, attack1Position);
+            StartCoroutine(ChangeAttackStatus());
         }
+    }
+    IEnumerator ChangeAttackStatus()
+    {
+        pState.attacking = true;
+        rb.velocity = new Vector2(0, 0);
+        rb.gravityScale = 0;
+        yield return new WaitForSeconds(timeBetweenAttack);
+        rb.gravityScale = gravity;
+        pState.attacking = false;
     }
     private void Hit(Transform _attackTransform, Vector2 _attackArea)
     {
         Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
-        if(objectsToHit.Length > 0)
-        {
-            Debug.Log("Hit");
-        }
+        //if(objectsToHit.Length > 0)
+        //{
+        //    Debug.Log("Hit");
+        //}
         for(int i=0; i<objectsToHit.Length; i++)
         {
             if (objectsToHit[i].GetComponent<Enemy>() != null)
