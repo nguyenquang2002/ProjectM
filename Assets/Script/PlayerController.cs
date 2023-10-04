@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int maxAirJump;
     [SerializeField] GameObject jumpEffect;
     [Space(5)]
+
+    [Header("Check Status Settings")]
+    [SerializeField] Image healthImg;
 
     [Header("Ground Check Settings")]
     [SerializeField] Transform groundCheckPoint;
@@ -85,6 +88,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        PlayerStatus();
         GetInputs();
         UpdateJumpVariable();
         if (pState.isDamaged) return;
@@ -108,6 +112,15 @@ public class PlayerController : MonoBehaviour
         velY = rb.velocity.y;
         attack = Input.GetButtonDown("Attack");
     }
+
+    private void PlayerStatus()
+    {
+        healthImg.fillAmount = health / maxHealth;
+        if(health <= 0)
+        {
+            Debug.Log("Death");
+        }
+    }
     private void CancelBooleanAnimation()
     {
         animator.SetBool("Running", false);
@@ -127,6 +140,7 @@ public class PlayerController : MonoBehaviour
         pState.isDamaged = true;
         ClampHealth();
         animator.SetTrigger("TakingDamage");
+        rb.velocity = new Vector2(0, 0);
         if (pState.enemyRight)
         {
             rb.AddForce( new Vector2(-knockbackForceX, knockbackForceY), ForceMode2D.Force);
