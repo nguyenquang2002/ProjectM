@@ -19,7 +19,7 @@ public class Zombie : Enemy
     protected override void Update()
     {
         base.Update();
-        if (!PlayerController.Instance.pState.isDamaged)
+        if (!PlayerController.Instance.pState.isDamaged && PlayerController.Instance.transform.position.y - transform.position.y <= 1.5 && Mathf.Abs(PlayerController.Instance.transform.position.x - transform.position.x) <= 5)
         {
             transform.position = Vector2.MoveTowards(transform.position, new Vector2(PlayerController.Instance.transform.position.x,transform.position.y), speed * Time.deltaTime);
         }
