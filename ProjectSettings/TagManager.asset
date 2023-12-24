@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Weapon
   - FxTemporaire
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -14,12 +15,12 @@ TagManager:
   - Water
   - UI
   - Attackable
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - MySkill
+  - EnemySkill
+  - Confider
+  - Interactable
+  - NPC
   - 
   - 
   - 
@@ -42,4 +43,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Foreground
+    uniqueID: 2691727835
     locked: 0

@@ -737,7 +737,7 @@ TextureImporter:
         serializedVersion: 2
         x: 138
         y: 616
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -758,7 +758,7 @@ TextureImporter:
         serializedVersion: 2
         x: 207
         y: 616
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -779,7 +779,7 @@ TextureImporter:
         serializedVersion: 2
         x: 276
         y: 616
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -800,7 +800,7 @@ TextureImporter:
         serializedVersion: 2
         x: 345
         y: 616
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -821,7 +821,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 572
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -840,9 +840,9 @@ TextureImporter:
       name: Warrior_Sheet-Effect_19
       rect:
         serializedVersion: 2
-        x: 81
+        x: 69
         y: 572
-        width: 51
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -861,9 +861,9 @@ TextureImporter:
       name: Warrior_Sheet-Effect_20
       rect:
         serializedVersion: 2
-        x: 148
+        x: 138
         y: 572
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -882,9 +882,9 @@ TextureImporter:
       name: Warrior_Sheet-Effect_21
       rect:
         serializedVersion: 2
-        x: 214
+        x: 207
         y: 572
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -903,9 +903,9 @@ TextureImporter:
       name: Warrior_Sheet-Effect_22
       rect:
         serializedVersion: 2
-        x: 280
+        x: 276
         y: 572
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -926,7 +926,7 @@ TextureImporter:
         serializedVersion: 2
         x: 345
         y: 572
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -947,7 +947,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 528
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -968,7 +968,7 @@ TextureImporter:
         serializedVersion: 2
         x: 69
         y: 528
-        width: 56
+        width: 69
         height: 44
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
