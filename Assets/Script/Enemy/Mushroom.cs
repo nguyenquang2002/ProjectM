@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.WSA;
 
 public class Mushroom : Enemy
 {
@@ -14,6 +13,7 @@ public class Mushroom : Enemy
     private bool playerDetect;
     private float shootCooldown, changeDirCooldown;
     private Vector2 skillDir = Vector2.right;
+    private float rotateSkill = 0;
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -73,16 +73,18 @@ public class Mushroom : Enemy
         if (walkRight)
         {
             skillDir = Vector2.right;
+            rotateSkill = 0;
         }
         else
         {
             skillDir = Vector2.left;
+            rotateSkill = 180;
         }
     }
 
     private void Shoot()
     {
-        GameObject fireballObj = Instantiate(fireballPre, rb.position + skillDir * 0.5f - new Vector2(0, 0.5f), Quaternion.identity);
+        GameObject fireballObj = Instantiate(fireballPre, rb.position + skillDir * 0.5f - new Vector2(0, 0.5f), Quaternion.Euler(0, rotateSkill, 0));
 
         fireballObj.GetComponent<EnemyProjectile>().Launch(skillDir, skillForce);
     }

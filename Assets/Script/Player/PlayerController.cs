@@ -85,6 +85,7 @@ public class PlayerController : MonoBehaviour
     private bool dashed;
     private RaycastHit2D raycastInteract, raycastNPC;
     private Vector2 skillDir = Vector2.right;
+    private float rotateSkill = 0;
     private AudioSource playerSFX;
 
     public static PlayerController Instance;
@@ -283,7 +284,7 @@ public class PlayerController : MonoBehaviour
         {
             if (mana > 0 && skillCooldown <= 0)
             {
-                GameObject fireballObj = Instantiate(fireballPre, rb.position + skillDir * 0.5f, Quaternion.identity);
+                GameObject fireballObj = Instantiate(fireballPre, rb.position + skillDir * 0.5f, Quaternion.Euler(0,rotateSkill,0));
                 fireballObj.GetComponent<Projectile>().Launch(skillDir, skillForce);
                 ChangeMana(-fireballObj.GetComponent<Projectile>().mana);
                 Playsound(fireballAudio);
@@ -303,10 +304,12 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(-1, transform.localScale.y);
             skillDir = Vector2.left;
+            rotateSkill = 180;
         } 
         else if(rb.velocity.x > 0) {
             transform.localScale = new Vector3(1, transform.localScale.y);
             skillDir = Vector2.right;
+            rotateSkill = 0;
         }
         skillDir.Normalize();
     }

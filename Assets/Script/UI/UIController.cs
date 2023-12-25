@@ -12,6 +12,25 @@ public class UIController : MonoBehaviour
         PlayerPrefs.DeleteAll();
         SceneManager.LoadScene("Level1");
     }
+    public void PlayLevel2()
+    {
+        Time.timeScale = 1;
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene("Level2");
+    }
+    public void PlayLevel3()
+    {
+        Time.timeScale = 1;
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene("Level3");
+    }
+    public void PlayLevel4()
+    {
+        Time.timeScale = 1;
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene("Level4");
+    }
+
     public void Pause()
     {
         Time.timeScale = 0;
