@@ -9,6 +9,7 @@ public class UIController : MonoBehaviour
     public void PlayGame()
     {
         Time.timeScale = 1;
+        PlayerPrefs.DeleteAll();
         SceneManager.LoadScene("Level1");
     }
     public void Pause()
@@ -33,6 +34,7 @@ public class UIController : MonoBehaviour
     }
     public void Quit()
     {
+        PlayerPrefs.DeleteAll();
         Application.Quit();
     }
 }

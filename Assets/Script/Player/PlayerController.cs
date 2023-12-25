@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Sound Effect Settings")]
     [SerializeField] AudioClip slashAudio;
-    [SerializeField] AudioClip hitAudio, deathAudio;
+    [SerializeField] AudioClip hitAudio, deathAudio, fireballAudio, jumpAudio, dashAudio;
     [Space(5)]
 
     public PlayerStateList pState;
@@ -99,9 +99,30 @@ public class PlayerController : MonoBehaviour
         {
             Instance = this;
         }
-        health = maxHealth;
-        mana = maxMana;
-        potion = maxPotion;
+        if (PlayerPrefs.HasKey("saveHealth"))
+        {
+            health = PlayerPrefs.GetFloat("saveHealth");
+        }
+        else
+        {
+            health = maxHealth;
+        }
+        if (PlayerPrefs.HasKey("saveMana"))
+        {
+            mana = PlayerPrefs.GetFloat("saveMana");
+        }
+        else
+        {
+            mana = maxMana;
+        }
+        if (PlayerPrefs.HasKey("savePotion"))
+        {
+            potion = PlayerPrefs.GetInt("savePotion");
+        }
+        else
+        {
+            potion = maxPotion;
+        }
     }
 
     // Start is called before the first frame update
@@ -158,6 +179,7 @@ public class PlayerController : MonoBehaviour
         potionQuantity.text = "X" + potion;
         if(health <= 0)
         {
+            PlayerPrefs.DeleteAll();
             StartCoroutine(Death());
         }
     }
@@ -192,14 +214,17 @@ public class PlayerController : MonoBehaviour
         {
             health = Mathf.Clamp(health + h, 0, maxHealth);
         }
+        PlayerPrefs.SetFloat("saveHealth", health);
     }
     public void ChangeMana(float m)
     {
         mana = Mathf.Clamp(mana + m, 0, maxMana);
+        PlayerPrefs.SetFloat("saveMana", mana);
     }
     public void ChangePotion(int p)
     {
         potion = Mathf.Clamp(potion + p, 0, maxPotion);
+        PlayerPrefs.SetInt("savePotion", potion);
     }
 
     IEnumerator TakingDamageEffect()
@@ -261,6 +286,7 @@ public class PlayerController : MonoBehaviour
                 GameObject fireballObj = Instantiate(fireballPre, rb.position + skillDir * 0.5f, Quaternion.identity);
                 fireballObj.GetComponent<Projectile>().Launch(skillDir, skillForce);
                 ChangeMana(-fireballObj.GetComponent<Projectile>().mana);
+                Playsound(fireballAudio);
                 skillCooldown = skillTime;
                 
             }
@@ -351,6 +377,7 @@ public class PlayerController : MonoBehaviour
         canDash = false; // set không thể dash
         pState.dashing = true; // set trạng thái đang dash
         animator.SetTrigger("Dashing"); // chạy animation
+        Playsound(dashAudio);
         CancelBooleanAnimation();
         rb.gravityScale = 0; // set trọng lực = 0 
         rb.velocity = new Vector2(transform.localScale.x * dashSpeed, 0); // dùng velocity
@@ -383,6 +410,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce); // dùng velocity vì nó là hàm của rb nên ko cần đưa vào fixedupdate
                 pState.jumping = true;
+                Playsound(jumpAudio);
                 Instantiate(jumpEffect, transform);
             }
             else if(!Grounded() && Input.GetButtonDown("Jump") && airJumpCounter < maxAirJump)
@@ -390,6 +418,7 @@ public class PlayerController : MonoBehaviour
                 pState.jumping = true;
                 airJumpCounter++;
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                Playsound(jumpAudio);
                 Instantiate(jumpEffect, transform);
             }
         }
