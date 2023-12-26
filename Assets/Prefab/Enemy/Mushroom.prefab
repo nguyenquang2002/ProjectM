@@ -286,7 +286,7 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
-  speed: 2
+  speed: 0
   timeWait: 0
   walkRight: 1
   isScout: 0

@@ -9171,7 +9171,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 605315860}
-  firstRespawn: {fileID: 1422435074620320098, guid: d3aeb02a84c4e694592616a509a5f422, type: 3}
 --- !u!1 &835187473
 GameObject:
   m_ObjectHideFlags: 0
@@ -11803,7 +11802,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 361416980419229993, guid: b5b921af205750848897eb9391cbae82, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -94.13
+      value: -94.08
       objectReference: {fileID: 0}
     - target: {fileID: 361416980419229993, guid: b5b921af205750848897eb9391cbae82, type: 3}
       propertyPath: m_LocalPosition.y

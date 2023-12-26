@@ -213,8 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e20c3c5a8ffe18d4085aa3803e9cbec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 20
-  damage: 2
+  health: 16
+  damage: 4
   isDamaged: 0
   knockbackForceX: 175
   checkRadius: 0.2

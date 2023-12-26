@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 20
-  damage: 2
+  damage: 3
   isDamaged: 0
   knockbackForceX: 200
   checkRadius: 0.2
@@ -265,7 +265,7 @@ MonoBehaviour:
   player:
     serializedVersion: 2
     m_Bits: 128
-  timeAttack: 5
+  timeAttack: 3
   timeBetweenAttack: 1
 --- !u!1 &1079294425264229943
 GameObject:
